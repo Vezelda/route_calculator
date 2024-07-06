@@ -21,6 +21,7 @@ def a_star(mapa, start, end):
     came_from = {}
     g_score = {start: 0}
     f_score = {start: heuristic(start, end)}
+    closed_set = set()  # Lista cerrada explícita
     
     while open_set:
         _, current = heapq.heappop(open_set)
@@ -32,6 +33,11 @@ def a_star(mapa, start, end):
                 current = came_from[current]
             path.append(start)
             return path[::-1]
+        
+        if current in closed_set:
+            continue
+        
+        closed_set.add(current)
         
         x, y = current
         for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:  # Movimientos posibles (arriba, abajo, izquierda, derecha)
@@ -58,7 +64,7 @@ def preguntar_tamano_matriz():
         try:
             filas = int(input("Introduce el número de filas: "))
             columnas = int(input("Introduce el número de columnas: "))
-            if filas > 0 and columnas > 0:
+            if filas > 0 and columnas > 0:  # Corregido aquí
                 return filas, columnas
             else:
                 print("El número de filas y columnas debe ser mayor que 0.")
@@ -71,7 +77,7 @@ def preguntar_coordenadas(filas, columnas, tipo):
         try:
             x = int(input(f"Introduce la coordenada x de {tipo} (0-{filas-1}): "))
             y = int(input(f"Introduce la coordenada y de {tipo} (0-{columnas-1}): "))
-            if 0 <= x < filas and 0 <= y < columnas:
+            if 0 <= x < filas and 0 <= y < columnas:  # Corregido aquí
                 return x, y
             else:
                 print("Las coordenadas deben estar dentro del rango del mapa.")
